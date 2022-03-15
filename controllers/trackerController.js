@@ -7,6 +7,7 @@ const {
   serverTimestamp,
   doc,
   updateDoc,
+  deleteDoc,
 } = require("firebase/firestore");
 
 const tracker_details = async (req, res) => {
@@ -67,7 +68,9 @@ const tracker_new = async (req, res) => {
 
 const tracker_delete = async (req, res) => {
   try {
-    console.log("Delete tracker", req.param.id);
+    const { id } = req.params;
+    const docRef = doc(db, `trackers/${id}`);
+    await deleteDoc(docRef);
     res.send("Tracker deleted");
   } catch (err) {
     console.error(err.message);
