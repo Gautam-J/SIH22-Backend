@@ -6,5 +6,6 @@ const router = express.Router();
 router.get("/index", trackerController.tracker_index);
 router.get("/:id", trackerController.tracker_details);
 router.put("/update/:id", trackerController.tracker_update);
+router.post("/new", trackerController.tracker_new);
 
 module.exports = router;
