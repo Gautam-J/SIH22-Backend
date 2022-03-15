@@ -1,5 +1,11 @@
 const { db } = require("../config/db");
-const { getDocs, getDoc, collection, doc } = require("firebase/firestore");
+const {
+  getDocs,
+  getDoc,
+  collection,
+  doc,
+  updateDoc,
+} = require("firebase/firestore");
 
 const tracker_details = async (req, res) => {
   try {
@@ -26,7 +32,21 @@ const tracker_index = async (req, res) => {
   }
 };
 
+const tracker_update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const docRef = doc(db, `trackers/${id}`);
+    const { trackerStatus } = req.body;
+    await updateDoc(docRef, { status: trackerStatus });
+    res.send("Tracker updated");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   tracker_index,
   tracker_details,
+  tracker_update,
 };
