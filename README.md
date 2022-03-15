@@ -27,10 +27,10 @@
 
 - POST - `/signup` - Register new user
 - POST - `/login` - Login user and return JSONWebToken
-- POST - `/newApplication` - Submit form for new application
 
 ### Tracker - `/api/trackers`
 
 - GET - `/index` - Get all trackers
 - GET - `/:id` - Get tracker by id
 - PUT - `/update/:id` - Update tracker by id
+- POST - `/new` - Create new tracker
