@@ -34,3 +34,4 @@
 - GET - `/:id` - Get tracker by id
 - PUT - `/update/:id` - Update tracker by id
 - POST - `/new` - Create new tracker
+- DELETE - `/delete/:id` - Delete tracker by id

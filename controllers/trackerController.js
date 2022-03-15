@@ -65,9 +65,20 @@ const tracker_new = async (req, res) => {
   }
 };
 
+const tracker_delete = async (req, res) => {
+  try {
+    console.log("Delete tracker", req.param.id);
+    res.send("Tracker deleted");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   tracker_index,
   tracker_details,
   tracker_update,
   tracker_new,
+  tracker_delete,
 };
