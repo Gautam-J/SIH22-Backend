@@ -1,9 +1,13 @@
 const { db } = require("../config/db");
-const { getDocs, collection } = require("firebase/firestore");
+const { getDocs, getDoc, collection, doc } = require("firebase/firestore");
 
 const tracker_details = async (req, res) => {
   try {
-    res.send(`Tracker details for ${req.params.id}`);
+    const { id } = req.params;
+    const docRef = doc(db, `trackers/${id}`);
+    const trackerSnapshot = await getDoc(docRef);
+    const tracker = trackerSnapshot.data();
+    res.send(tracker);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
