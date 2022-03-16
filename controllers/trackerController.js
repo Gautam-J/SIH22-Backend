@@ -10,6 +10,7 @@ const {
   deleteDoc,
 } = require("firebase/firestore");
 
+//TODO: Update this
 const tracker_details = async (req, res) => {
   try {
     const { id } = req.params;
@@ -23,9 +24,11 @@ const tracker_details = async (req, res) => {
   }
 };
 
+// /api/trackers/index
+//TODO: Update this
 const tracker_index = async (req, res) => {
   try {
-    const colRef = collection(db, "trackers");
+    const colRef = collection(db, "users");
     const trackerSnapshot = await getDocs(colRef);
     const trackerList = trackerSnapshot.docs.map((doc) => doc.data());
     res.send(trackerList);
@@ -35,11 +38,11 @@ const tracker_index = async (req, res) => {
   }
 };
 
+// /api/trackers/update
 const tracker_update = async (req, res) => {
   try {
-    const { id } = req.params;
-    const docRef = doc(db, `trackers/${id}`);
-    const { trackerStatus } = req.body;
+    const { userId, applicationId, trackerStatus } = req.body;
+    const docRef = doc(db, `users/${userId}/applications/${applicationId}`);
     await updateDoc(docRef, { status: trackerStatus });
     res.send("Tracker updated");
   } catch (err) {
@@ -47,32 +50,38 @@ const tracker_update = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-
+// /api/trackers/new
 const tracker_new = async (req, res) => {
   try {
-    const { name, phone } = req.body;
-    console.log(name, phone);
-    const trackerRef = collection(db, "trackers");
+    const { name, phone, userId } = req.body;
+    const trackerRef = collection(db, `users/${userId}/applications`);
     const docRef = await addDoc(trackerRef, {
       name: name,
       phone: phone,
       status: "new",
       createdAt: serverTimestamp(),
     });
+    console.log(`Pushed to user ${userId}`);
     console.log(docRef.id);
-    
-    res.send("New application created.");
+    //updating applicationID
+    await updateDoc(doc(db, `users/${userId}/applications/${docRef.id}`), {
+      applicationId: docRef.id,
+    });
+    console.log("Updated application ID");
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
 
+// /api/trackers/delete
+// TODO: fix deletion
 const tracker_delete = async (req, res) => {
   try {
-    const { id } = req.params;
-    const docRef = doc(db, `trackers/${id}`);
+    const { userId, applicationId } = req.params;
+    const docRef = doc(db, `users/${userId}/applications/${applicationId}`);
     await deleteDoc(docRef);
+    console.log("deleted");
     res.send("Tracker deleted");
   } catch (err) {
     console.error(err.message);
