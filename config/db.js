@@ -5,16 +5,15 @@ const config = require("config");
 
 // get config from ./default.json
 const firebaseConfig = {
-  apiKey: config.get("apiKey"),
-  authDomain: config.get("authDomain"),
-  projectId: config.get("projectId"),
-  storageBucket: config.get("storageBucket"),
-  messagingSenderId: config.get("messagingSenderId"),
-  appId: config.get("appId"),
+  apiKey: "AIzaSyAHD0dltwAbH81Qf7KtzTTioC57ezqBxPE",
+  authDomain: "sih22-khel-ind.firebaseapp.com",
+  projectId: "sih22-khel-ind",
+  storageBucket: "sih22-khel-ind.appspot.com",
+  messagingSenderId: "564861176652",
+  appId: "1:564861176652:web:219ecda27e378f62439de9"
 };
-
-initializeApp(firebaseConfig);
-const db = getFirestore();
-const auth = getAuth();
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
 
 module.exports = { db, auth };

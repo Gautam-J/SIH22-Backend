@@ -52,8 +52,8 @@ const tracker_new = async (req, res) => {
   try {
     const { name, phone } = req.body;
     console.log(name, phone);
-    const colRef = collection(db, "trackers");
-    await addDoc(colRef, {
+    const trackerRef = collection(db, "trackers");
+    await addDoc(trackerRef, {
       name: name,
       phone: phone,
       status: "new",
