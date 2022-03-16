@@ -1,4 +1,4 @@
-const { auth } = require("../config/db");
+const { auth, db } = require("../config/db");
 const {
   connectAuthEmulator,
   signInWithEmailAndPassword,
@@ -25,7 +25,7 @@ const user_login = async (req, res) => {
 
 const user_register = async (req, res) => {
   try {
-    const { loginEmail, loginPass } = req.body;
+    const { loginEmail,   loginPass } = req.body;
     const userCredentials = await createUserWithEmailAndPassword(
       auth,
       loginEmail,
@@ -59,6 +59,19 @@ const logout = async (req, res, next) => {
     res.status(500).send("Logout error");
   }
   res.end();
+};
+const aadhar_auth = async (req, res) => {
+  try {
+    const { aadhaar_no, mobile_no, name } = req.body;
+    
+    const aadharRef = collection(db, "aadhaar");
+    const q = query(aadharRef, where("aadhaar_number", "==", aadhaar_no));
+    const querySnapshot = await getDocs(q);
+    res.send("Aadhar Verified!");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 };
 
 module.exports = {
