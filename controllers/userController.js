@@ -3,8 +3,10 @@ const {
   connectAuthEmulator,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPhoneNumber,
   onAuthStateChanged,
   signOut,
+  RecaptchaVerifier,
 } = require("firebase/auth");
 
 const user_login = async (req, res) => {
@@ -15,7 +17,7 @@ const user_login = async (req, res) => {
       loginEmail,
       loginPass
     );
-    console.log(userCredentials.user.email);
+    console.log(userCredentials.user);
     res.send("User logged in.");
   } catch (err) {
     console.error(err.message);
@@ -39,17 +41,6 @@ const user_register = async (req, res) => {
   }
 };
 
-const monitor_AuthState = async (req, res, next) => {
-  onAuthStateChanged(auth, (user) => {
-    if(user){
-      console.log(user.displayName);
-    }
-    else{
-      console.log('No user logged in');
-    }
-  });
-};
-
 const logout = async (req, res, next) => {
   try {
     await signOut(auth);
@@ -61,9 +52,29 @@ const logout = async (req, res, next) => {
   res.end();
 };
 
+const monitor_AuthState = async (req, res, next) => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log(user.displayName);
+    } else {
+      console.log("No user logged in");
+    }
+    res.end();
+  });
+};
+
+const phoneSignIn = async (req, res, next) => {
+  try {
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
 module.exports = {
   user_register,
   user_login,
   logout,
-  monitor_AuthState
+  monitor_AuthState,
+  phoneSignIn,
 };
