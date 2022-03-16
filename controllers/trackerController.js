@@ -53,12 +53,14 @@ const tracker_new = async (req, res) => {
     const { name, phone } = req.body;
     console.log(name, phone);
     const trackerRef = collection(db, "trackers");
-    await addDoc(trackerRef, {
+    const docRef = await addDoc(trackerRef, {
       name: name,
       phone: phone,
       status: "new",
       createdAt: serverTimestamp(),
     });
+    console.log(docRef.id);
+    
     res.send("New application created.");
   } catch (err) {
     console.error(err.message);
