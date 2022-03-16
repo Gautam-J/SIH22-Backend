@@ -1,4 +1,4 @@
-const { auth } = require("../config/db");
+const { auth, db } = require("../config/db");
 const {
   connectAuthEmulator,
   signInWithEmailAndPassword,
@@ -8,6 +8,17 @@ const {
   signOut,
   RecaptchaVerifier,
 } = require("firebase/auth");
+
+const {
+  getDocs,
+  getDoc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  doc,
+  updateDoc,
+  deleteDoc,
+} = require("firebase/firestore");
 
 const user_login = async (req, res) => {
   try {
@@ -25,6 +36,7 @@ const user_login = async (req, res) => {
   }
 };
 
+// /api/users/signup
 const user_register = async (req, res) => {
   try {
     const { loginEmail, loginPass } = req.body;
@@ -33,7 +45,17 @@ const user_register = async (req, res) => {
       loginEmail,
       loginPass
     );
-    console.log(userCredentials.user);
+    //console.log(userCredentials.user);
+    //adding user to firestore
+    const usersRef = collection(db,"users");
+    const docRef = await addDoc(usersRef, {
+      email:loginEmail,
+      
+    });
+    console.log(docRef.id);
+    await updateDoc(doc(db,`users/${docRef.id}`),{
+      userId : docRef.id,
+    })    
     res.send("New user registered.");
   } catch (err) {
     console.error(err.message);
